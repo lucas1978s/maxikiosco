@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consulta de Precios</title>
+</head>
+<body style="font-family: sans-serif; text-align: center; margin-top: 50px;">
+  <div id="info">
+    <h2>🔎 Consultando producto...</h2>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const codigo = params.get('codigo');
+
+    fetch("https://www.dropbox.com/s/xxxxxxxxxxxxxx/base.xlsx?dl=1")
+      .then(res => res.arrayBuffer())
+      .then(data => {
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        const row = json.find(r => r[1] == codigo); // columna B
+        const nombre = row?.[2]; // columna C
+        const precio = row?.[6]; // columna G
+
+        const div = document.getElementById("info");
+        if (row) {
+          div.innerHTML = `<h1>${nombre}</h1><h2>💲 $${precio}</h2>`;
+        } else {
+          div.innerHTML = "<h2>❌ Producto no encontrado</h2>";
+        }
+      });
+  </script>
+</body>
+</html>
