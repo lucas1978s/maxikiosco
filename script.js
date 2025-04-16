@@ -7,11 +7,8 @@ window.onload = async function () {
     return;
   }
 
-  const archivoURL = "https://www.dropbox.com/scl/fi/xoln3oqxce8fmcwl5im1n/Articulo.xlsx?rlkey=w1a7d77xn0rkknbn0q5urt5jt&st=fnfucdop&dl=1";
-  const proxy = "https://cors-anywhere.herokuapp.com/";
-
   try {
-    const response = await fetch(proxy + archivoURL);
+    const response = await fetch(https://raw.githubusercontent.com/lucas1978s/maxikiosco/main/Articulo.xlsx");
     const data = await response.arrayBuffer();
     const workbook = XLSX.read(data, { type: "array" });
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -26,10 +23,10 @@ window.onload = async function () {
       }
     }
 
-    document.body.innerHTML = "<p>❌ Producto no encontrado.</p>";
+    document.body.innerHTML = "<p>Producto no encontrado.</p>";
   } catch (error) {
     console.error("Error al leer el archivo XLSX:", error);
-    document.body.innerHTML = "<p>❌ Error al cargar los datos</p>";
+    document.body.innerHTML = "<p>Error al cargar los datos.</p>";
   }
 };
 
