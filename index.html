@@ -10,29 +10,43 @@
     <h2>🔎 Consultando producto...</h2>
   </div>
 
+  <!-- Cargar la librería xlsx -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
   <script>
+    // Obtener el parámetro 'codigo' de la URL
     const params = new URLSearchParams(window.location.search);
     const codigo = params.get('codigo');
 
+    // URL del archivo de Dropbox con ?dl=1 para descarga directa
     fetch("https://www.dropbox.com/scl/fi/xoln3oqxce8fmcwl5im1n/Articulo.xlsx?rlkey=w1a7d77xn0rkknbn0q5urt5jt&st=fnfucdop&dl=1")
       .then(res => res.arrayBuffer())
       .then(data => {
+        // Leer el archivo XLSX
         const workbook = XLSX.read(data, { type: "array" });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-        const row = json.find(r => r[1] == codigo); // columna B
-        const nombre = row?.[2]; // columna C
-        const precio = row?.[6]; // columna G
+        // Buscar el producto usando el código de barras
+        const row = json.find(r => r[1] == codigo); // Columna B (índice 1)
+        const nombre = row?.[2]; // Columna C (índice 2)
+        const precio = row?.[6]; // Columna G (índice 6)
 
+        // Mostrar la información en el div
         const div = document.getElementById("info");
         if (row) {
           div.innerHTML = `<h1>${nombre}</h1><h2>💲 $${precio}</h2>`;
         } else {
           div.innerHTML = "<h2>❌ Producto no encontrado</h2>";
         }
+      })
+      .catch(error => {
+        // Manejo de errores si la consulta al archivo falla
+        const div = document.getElementById("info");
+        div.innerHTML = "<h2>❌ Error al cargar los datos</h2>";
+        console.error("Error al leer el archivo XLSX:", error);
       });
   </script>
 </body>
 </html>
+
