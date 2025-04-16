@@ -15,7 +15,7 @@
     const params = new URLSearchParams(window.location.search);
     const codigo = params.get('codigo');
 
-    fetch("https://www.dropbox.com/s/xxxxxxxxxxxxxx/base.xlsx?dl=1")
+    fetch("https://www.dropbox.com/scl/fi/xoln3oqxce8fmcwl5im1n/Articulo.xlsx?rlkey=w1a7d77xn0rkknbn0q5urt5jt&st=fnfucdop&dl=1")
       .then(res => res.arrayBuffer())
       .then(data => {
         const workbook = XLSX.read(data, { type: "array" });
